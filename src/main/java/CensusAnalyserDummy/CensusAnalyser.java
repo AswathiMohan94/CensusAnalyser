@@ -2,7 +2,6 @@ package CensusAnalyserDummy;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -34,10 +33,7 @@ public class CensusAnalyser {
         }catch (RuntimeException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.Incorrect_Delimiter_OR_wrong_Header);
-        }/*catch (NoSuchFieldException e) {
-            throw new CensusAnalyserException(e.getMessage(),
-                    CensusAnalyserException.ExceptionType.Incorrect_Delimiter);
-        }*/
+        }
         catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
