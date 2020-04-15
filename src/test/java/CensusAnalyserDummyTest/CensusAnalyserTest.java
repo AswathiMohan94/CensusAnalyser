@@ -147,6 +147,8 @@ public class CensusAnalyserTest {
         }
         IndiaStateCodeCSV[] Code = new Gson().fromJson(sortedStateCode, IndiaStateCodeCSV[].class);
         Assert.assertEquals("AD", Code[0].StateCode);
+        Assert.assertEquals("wB", Code[36].StateCode);
+
 
     }
 }
