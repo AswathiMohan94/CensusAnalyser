@@ -87,12 +87,33 @@ public class CensusAnalyser {
         }
         Comparator<Map.Entry<String, IndiaCensusDAO>> censusComparator = Comparator.comparing(census -> census.getValue().population);
         LinkedHashMap<String, IndiaCensusDAO> sortedByValue = this.sortPopulation(censusComparator);
-        ArrayList<IndiaCensusDAO> list = new ArrayList<>(sortedByValue.values());        //for getting mostpopulated state the order need to be reversed into descending order
+        ArrayList<IndiaCensusDAO> list = new ArrayList<>(sortedByValue.values());  //for getting mostpopulated state the order need to be reversed into descending order
         Collections.reverse(list);
         String sortedStateCensusJson = new Gson().toJson(list);
         return sortedStateCensusJson;
     }
-
+    public String CensusData_Sorted_BasedOnPopulationDensity() throws CensusAnalyserException {
+        if (censusStateMap == null || censusStateMap.size() == 0) {
+            throw new CensusAnalyserException("No Census Data", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        }
+        Comparator<Map.Entry<String, IndiaCensusDAO>> censusComparator = Comparator.comparing(census -> census.getValue().densityPerSqkm);
+        LinkedHashMap<String, IndiaCensusDAO> sortedByValue = this.sortPopulationDensity(censusComparator);
+        ArrayList<IndiaCensusDAO> list = new ArrayList<>(sortedByValue.values()); //for getting the state which having the hightest density of population, the order need to be reversed into descending order
+        Collections.reverse(list);
+        String sortedStateCensusJson = new Gson().toJson(list);
+        return sortedStateCensusJson;
+    }
+    public String CensusData_Sorted_AreaWise() throws CensusAnalyserException {
+        if (censusStateMap == null || censusStateMap.size() == 0) {
+            throw new CensusAnalyserException("No Census Data", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        }
+        Comparator<Map.Entry<String, IndiaCensusDAO>> censusComparator = Comparator.comparing(census -> census.getValue().areaInSqKm);
+        LinkedHashMap<String, IndiaCensusDAO> sortedByValue = this.sortArea(censusComparator);
+        ArrayList<IndiaCensusDAO> list = new ArrayList<>(sortedByValue.values()); //for getting the state which having the hightest area, the order need to be reversed into descending order
+        Collections.reverse(list);
+        String sortedStateCensusJson = new Gson().toJson(list);
+        return sortedStateCensusJson;
+    }
     private <E extends IndiaCensusDAO> LinkedHashMap<String, IndiaCensusDAO> sort(Comparator censusComparator) {
         Set<Map.Entry<String, IndiaCensusDAO>> entries = censusStateMap.entrySet();
         List<Map.Entry<String, IndiaCensusDAO>> listOfEntries = new ArrayList<>(entries);
@@ -114,6 +135,24 @@ public class CensusAnalyser {
     }
 
     private <E extends IndiaCensusDAO> LinkedHashMap<String, IndiaCensusDAO> sortPopulation(Comparator censusComparator) {
+        Set<Map.Entry<String, IndiaCensusDAO>> entries = censusStateMap.entrySet();
+        List<Map.Entry<String, IndiaCensusDAO>> listOfEntries = new ArrayList<>(entries);
+        Collections.sort(listOfEntries, censusComparator);
+        LinkedHashMap<String, IndiaCensusDAO> sortedByValue = new LinkedHashMap<>(listOfEntries.size());
+        for (Map.Entry<String, IndiaCensusDAO> entry : listOfEntries) {
+            sortedByValue.put(entry.getKey(), entry.getValue()); }
+        return sortedByValue; }
+
+    private <E extends IndiaCensusDAO> LinkedHashMap<String, IndiaCensusDAO> sortPopulationDensity(Comparator censusComparator) {
+        Set<Map.Entry<String, IndiaCensusDAO>> entries = censusStateMap.entrySet();
+        List<Map.Entry<String, IndiaCensusDAO>> listOfEntries = new ArrayList<>(entries);
+        Collections.sort(listOfEntries, censusComparator);
+        LinkedHashMap<String, IndiaCensusDAO> sortedByValue = new LinkedHashMap<>(listOfEntries.size());
+        for (Map.Entry<String, IndiaCensusDAO> entry : listOfEntries) {
+            sortedByValue.put(entry.getKey(), entry.getValue()); }
+        return sortedByValue; }
+
+    private <E extends IndiaCensusDAO> LinkedHashMap<String, IndiaCensusDAO> sortArea(Comparator censusComparator) {
         Set<Map.Entry<String, IndiaCensusDAO>> entries = censusStateMap.entrySet();
         List<Map.Entry<String, IndiaCensusDAO>> listOfEntries = new ArrayList<>(entries);
         Collections.sort(listOfEntries, censusComparator);

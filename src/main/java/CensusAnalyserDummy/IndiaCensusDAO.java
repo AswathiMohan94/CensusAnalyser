@@ -3,7 +3,7 @@ package CensusAnalyserDummy;
 
 public class IndiaCensusDAO {
     public String state;
-    private int areaInSqKm;
+    public int areaInSqKm;
     public int densityPerSqkm;
     public int population;
 
