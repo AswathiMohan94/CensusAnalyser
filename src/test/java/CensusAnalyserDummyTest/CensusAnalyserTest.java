@@ -124,7 +124,7 @@ public class CensusAnalyserTest {
         Assert.assertEquals("WB", Code[36].StateCode);
     }
     @Test
-    public void givenIndianCensusData_WhenSortedPopulationDensity_ShouldReturnSortedResult() throws CensusAnalyserException {
+    public void givenIndianCensusData_WhenSortedPopulationWise_ShouldReturnSortedResult() throws CensusAnalyserException {
         CensusAnalyser censusAnalyser = new CensusAnalyser();
         censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
         String sortedCensusData = null;
