@@ -17,6 +17,7 @@ public class CensusAnalyserTest {
     private static final String Incorrect_Delimiter = "./src/test/resources/IndiaStateCensusData.csv";
     private static final String WRONG_CSV_header = "./src/test/java/wrongfiles/IndiaStateCensusData.csv";
     private static final String INDIA_STATE_CODE_PATH = "./src/main/resources/IndiaStateCode.csv";
+    private static final String US_CENSUS_CSV_PATH = "./src/main/resources/USCensusData.csv";
 
 
     @Test
@@ -123,6 +124,7 @@ public class CensusAnalyserTest {
         Assert.assertEquals("AD", Code[0].StateCode);
         Assert.assertEquals("WB", Code[36].StateCode);
     }
+
     @Test
     public void givenIndianCensusData_WhenSortedPopulationWise_ShouldReturnSortedResult() throws CensusAnalyserException {
         CensusAnalyser censusAnalyser = new CensusAnalyser();
@@ -138,6 +140,7 @@ public class CensusAnalyserTest {
         int numOfRecords = censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
         Assert.assertEquals(29, numOfRecords);
     }
+
     @Test
     public void givenIndianCensusData_SortedBasedOnPolpulationDensity_ShouldReturnSortedResult() throws CensusAnalyserException {
         CensusAnalyser censusAnalyser = new CensusAnalyser();
@@ -151,6 +154,7 @@ public class CensusAnalyserTest {
         IndiaCensusCSV[] Census = new Gson().fromJson(sortedCensusData, IndiaCensusCSV[].class);
         System.out.println(sortedCensusData);
     }
+
     @Test
     public void givenIndianCensusData_AreaWiseSorted_ShouldReturnSortedResult() throws CensusAnalyserException {
         CensusAnalyser censusAnalyser = new CensusAnalyser();
@@ -165,7 +169,14 @@ public class CensusAnalyserTest {
         System.out.println(sortedCensusData);
     }
 
-
-
-}
+    @Test
+    public void givenUSCensusData_ShouldReturnCorrectData() {
+            try {
+                CensusAnalyser censusAnalyser = new CensusAnalyser();
+                int usCensusDataCount = censusAnalyser.loadUSCensusData(US_CENSUS_CSV_PATH);
+                Assert.assertEquals(51, usCensusDataCount);
+            } catch (CensusAnalyserException e) {
+            }
+        }
+    }
 

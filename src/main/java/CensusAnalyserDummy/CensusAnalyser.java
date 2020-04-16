@@ -13,10 +13,21 @@ import java.util.stream.StreamSupport;
 public class CensusAnalyser {
     Map<String, IndiaCensusDAO> censusStateMap = null;
     Map<String, StateCodeDAO> stateCodeMap = null;
+    Map<String, USCensusDAO> UScensusStateMap = null;
+
+    List<IndiaCensusDAO> censusList = null;
+    List<USCensusDAO>UScensusList= null;
+    List<IndiaCensusCSV> CsvCensusDataList= new ArrayList<>();
 
     public CensusAnalyser() {
         this.censusStateMap = new HashMap<>();
+        this.UScensusStateMap = new HashMap<String, USCensusDAO>();
+
         this.stateCodeMap = new HashMap<>();
+        this.censusList = new ArrayList<IndiaCensusDAO>();
+        this.UScensusList = new ArrayList<USCensusDAO>();
+
+
 
     }
 
@@ -36,6 +47,24 @@ public class CensusAnalyser {
         } catch (NoSuchFileException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.WRONG_FILE_TYPE);
+        } catch (IOException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        } catch (CSVBuilderException e) {
+            throw new CensusAnalyserException(e.getMessage(), e.type.name());
+        }
+
+    }
+    public int loadUSCensusData(String usCensusCsvPath) throws CensusAnalyserException {
+        try (Reader reader = Files.newBufferedReader(Paths.get(usCensusCsvPath))) {
+            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
+            Iterator<USCensusCSV> csvFileIterator = csvBuilder.getCSVFileIterator(reader, USCensusCSV.class);
+            while (csvFileIterator.hasNext()) {
+                USCensusDAO usCensusDAO = new USCensusDAO(csvFileIterator.next());
+                this.UScensusStateMap.put(USCensusDAO.state, usCensusDAO);
+            }
+            return this.UScensusStateMap.size();
+
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
@@ -161,4 +190,6 @@ public class CensusAnalyser {
         for (Map.Entry<String, IndiaCensusDAO> entry : listOfEntries) {
             sortedByValue.put(entry.getKey(), entry.getValue()); }
         return sortedByValue; }
+
+
 }
