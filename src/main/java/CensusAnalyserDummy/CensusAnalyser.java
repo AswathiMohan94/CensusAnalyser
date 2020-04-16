@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.StreamSupport;
 
 public class CensusAnalyser {
     Map<String, IndiaCensusDAO> censusStateMap = null;
@@ -49,11 +50,11 @@ public class CensusAnalyser {
         try (Reader reader = Files.newBufferedReader(Paths.get(StateCSVFilePath))) {
             ICSVBuilder CSVBuilder = CSVBuilderFactory.createCSVBuilder();
             Iterator<IndiaStateCodeCSV> stateCSVIterator = CSVBuilder.getCSVFileIterator(reader, IndiaStateCodeCSV.class);
-            while (stateCSVIterator.hasNext()) {
-                StateCodeDAO stateCodeDAO = new StateCodeDAO(stateCSVIterator.next());
-                this.stateCodeMap.put(StateCodeDAO.StateCode, stateCodeDAO);
-            }
-            return this.stateCodeMap.size();
+            Iterable<IndiaStateCodeCSV>csvIterable= () -> stateCSVIterator;
+            StreamSupport.stream(csvIterable.spliterator(),false)
+                        .filter(csvState -> stateCodeMap.get(csvState)!=null)
+                        .forEach(csvState -> stateCodeMap.get(csvState.StateName).StateCode = csvState.StateCode);
+         return this.stateCodeMap.size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
