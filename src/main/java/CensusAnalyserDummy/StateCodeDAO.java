@@ -1,8 +1,8 @@
 package CensusAnalyserDummy;
 
 public class StateCodeDAO {
+    public static String StateCode;
     public String StateName;
-    public String StateCode;
 
 
 
