@@ -1,4 +1,6 @@
 package CensusAnalyserDummy;
+
+
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -30,4 +32,3 @@ public class openCSVBuilder<E> implements ICSVBuilder {
         }
     }
 }
-
