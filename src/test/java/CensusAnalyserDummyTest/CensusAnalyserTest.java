@@ -125,33 +125,3 @@ public class CensusAnalyserTest {
     }
 }
 
- /*   @Test
-    public void givenIndianCensusData_WhenSortedPopulation_ShouldReturnSortedResult() throws CensusAnalyserException {
-        CensusAnalyser censusAnalyser = new CensusAnalyser();
-        censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
-        String sortedCensusData = null;
-        try {
-            sortedCensusData = censusAnalyser.getPopulationWiseSortedCensusData();
-        } catch (CensusAnalyserException e) {
-            e.printStackTrace();
-        }
-        IndiaCensusCSV[] Census = new Gson().fromJson(sortedCensusData, IndiaCensusCSV[].class);
-        //   System.out.println(sortedCensusData);
-        int numOfRecords = censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
-        Assert.assertEquals(29, numOfRecords);
-    }
-
-    @Test
-    public void givenIndianCensusData_WhenSortedPopulationDensity_ShouldReturnSortedResult() throws CensusAnalyserException {
-        CensusAnalyser censusAnalyser = new CensusAnalyser();
-        censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
-        String sortedCensusData = null;
-        try {
-            sortedCensusData = censusAnalyser.getDensityWiseSortedCensusData();
-        } catch (CensusAnalyserException e) {
-            e.printStackTrace();
-        }
-        IndiaCensusCSV[] Census = new Gson().fromJson(sortedCensusData, IndiaCensusCSV[].class);
-        //   System.out.println(sortedCensusData);
-    }*/
-
