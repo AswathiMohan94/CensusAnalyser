@@ -13,10 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-//import org.codehaus.jackson.map.JsonMappingException;
-//import org.codehaus.jackson.map.ObjectMapper;
-//import org.json.simple.JSONArray;
-//import org.json.simple.JSONObject;
+
 
 public class CensusAnalyser {
     List<IndiaCensusDAO> censusList = null;
@@ -101,18 +98,6 @@ public class CensusAnalyser {
         String sortedStateCodeJson = new Gson().toJson(codeList);
         return sortedStateCodeJson;
     }
-
-   /* public String getPopulationWiseSortedCensusData() throws CensusAnalyserException {
-        if (censusList == null || censusList.size() == 0) {
-            throw new CensusAnalyserException("no census data", CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
-        }
-        Comparator<IndiaCensusDAO> censusComparator = Comparator.comparing(census -> census.population);
-        this.sortPopulation(censusComparator);
-        String sortedStateCensusJson = new Gson().toJson(censusList);
-        return sortedStateCensusJson;
-        // JSONObject employeeDetails = new JSONObject();
-
-    }*/
 
     private void sort(Comparator<IndiaCensusDAO> CensusComparator) {
         for (int i = 0; i < censusList.size() - 1; i++) {
