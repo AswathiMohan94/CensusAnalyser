@@ -71,8 +71,8 @@ public class CensusAnalyser {
         ArrayList<IndiaCensusDAO> list = new ArrayList<>(sortedByValue.values());  //for getting mostpopulated state the order need to be reversed into descending order
         Collections.reverse(list);
         String sortedStateCensusJson = new Gson().toJson(list);
-        return sortedStateCensusJson;
-    }
+        return sortedStateCensusJson;}
+
     public String CensusData_Sorted_BasedOnPopulationDensity() throws CensusAnalyserException {
         if (censusStateMap == null || censusStateMap.size() == 0) {
             throw new CensusAnalyserException("No Census Data", CENSUS_FILE_PROBLEM);
@@ -95,14 +95,18 @@ public class CensusAnalyser {
         String sortedStateCensusJson = new Gson().toJson(list);
         return sortedStateCensusJson;
     }
-    private <E extends IndiaCensusDAO> LinkedHashMap<String, IndiaCensusDAO> sort(List<CensusDAO> censusDAOS, Comparator censusComparator) {
-        Set<Map.Entry<String, IndiaCensusDAO>> entries = StateMap.entrySet();
-        List<Map.Entry<String, IndiaCensusDAO>> listOfEntries = new ArrayList<>(entries);
-        Collections.sort(listOfEntries, censusComparator);
-        LinkedHashMap<String, IndiaCensusDAO> sortedByValue = new LinkedHashMap<>(listOfEntries.size());
-        for (Map.Entry<String, IndiaCensusDAO> entry : listOfEntries) {
-            sortedByValue.put(entry.getKey(), entry.getValue()); }
-        return sortedByValue; }
+ /*   public String US_data_PopulationWiseSorted() throws CensusAnalyserException {
+        if (censusStateMap == null || censusStateMap.size() == 0) {
+            throw new CensusAnalyserException("No Census Data", CENSUS_FILE_PROBLEM);
+        }
+        Comparator<Map.Entry<String, IndiaCensusDAO>> censusComparator = Comparator.comparing(census -> census.getValue().population);
+        LinkedHashMap<String, IndiaCensusDAO> sortedByValue = this.sortPopulation(censusComparator);
+        ArrayList<IndiaCensusDAO> list = new ArrayList<>(sortedByValue.values());  //for getting mostpopulated state the order need to be reversed into descending order
+        Collections.reverse(list);
+        String sortedStateCensusJson = new Gson().toJson(list);
+        return sortedStateCensusJson;}*/
+
+
 
     private <E extends StateCodeDAO> LinkedHashMap<String, StateCodeDAO> CodeSort(Comparator codeComparator) {
         Set<Map.Entry<String, StateCodeDAO>> entries = stateCodeMap.entrySet();
