@@ -21,9 +21,16 @@ public class CensusLoader {
 
     }
 
+    public Map<String, CensusDAO> loadCensusData(CensusAnalyser.Country country, String... csvFilePath) throws CensusAnalyserException {
+        if (country.equals(CensusAnalyser.Country.INDIA))
+            return this.loadCensusData(IndiaCensusCSV.class, csvFilePath);
+        else if (country.equals(CensusAnalyser.Country.US))
+            return this.loadCensusData(USCensusCSV.class, csvFilePath);
+        else throw new CensusAnalyserException("Incorrect country",CensusAnalyserException.ExceptionType.INVALID_COUNTRY);
+    }
 
 
-    public <E> Map<String,CensusDAO> loadCensusData(Class<E> censusCSVClass, String... csvFilePath) throws CensusAnalyserException {
+    private <E> Map<String,CensusDAO> loadCensusData(Class<E> censusCSVClass, String... csvFilePath) throws CensusAnalyserException {
         if( !csvFilePath[0].contains(".csv")){
             throw new CensusAnalyserException("Enter proper file extention", CensusAnalyserException.ExceptionType.TYPE_EXTENSION_WRONG);
         }
@@ -74,4 +81,6 @@ public class CensusLoader {
             throw new CensusAnalyserException(e.getMessage(), e.type.name());
         }
     }
+
+
 }

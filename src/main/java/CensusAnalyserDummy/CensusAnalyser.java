@@ -5,40 +5,24 @@ import com.google.gson.Gson;
 import java.util.*;
 
 public class CensusAnalyser {
+    public enum Country { INDIA,US;}
     Map<String, CensusDAO> censusStateMap = null;
     Map<String, IndiaCensusDAO> StateMap = null;
 
     Map<String, StateCodeDAO> stateCodeMap = null;
     Map<String, USCensusDAO> UScensusStateMap = null;
 
-    List<IndiaCensusDAO> censusList = null;
-    List<USCensusDAO>UScensusList= null;
-    List<IndiaCensusCSV> CsvCensusDataList= new ArrayList<>();
-
     public CensusAnalyser() {
         this.censusStateMap = new HashMap<>();
         this.UScensusStateMap = new HashMap<String, USCensusDAO>();
         this.StateMap = new HashMap<>();
-
         this.stateCodeMap = new HashMap<>();
-        this.censusList = new ArrayList<IndiaCensusDAO>();
-        this.UScensusList = new ArrayList<USCensusDAO>();
+      }
 
-
-
-    }
-
-    public int loadIndiaCensusData(String... csvFilePath) throws CensusAnalyserException {
-        censusStateMap = new CensusLoader().loadCensusData(IndiaCensusCSV.class, csvFilePath);
+    public int loadCensusData(Country country, String... csvFilePath) throws CensusAnalyserException {
+        censusStateMap = new CensusLoader().loadCensusData(country, csvFilePath);
         return censusStateMap.size();
     }
-
-    public int loadUSCensusData(String... csvFilePath) throws CensusAnalyserException {
-            censusStateMap = new CensusLoader().loadCensusData(USCensusCSV.class,csvFilePath);
-            return censusStateMap.size();
-    }
-
-
 
     public String getStateWiseSortedCensusData() throws CensusAnalyserException {
         if (censusStateMap == null || censusStateMap.size() == 0)
