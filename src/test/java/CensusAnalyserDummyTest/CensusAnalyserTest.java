@@ -105,9 +105,13 @@ public class CensusAnalyserTest {
     public void givenIndianCensusData_WhenSortedPopulationWise_ShouldReturnSortedResult() throws CensusAnalyserException {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser(CensusAnalyser.Country.INDIA);
+            CensusAnalyser censusAnalyser1 = new CensusAnalyser(CensusAnalyser.Country.US);
             censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA, INDIA_CENSUS_CSV_FILE_PATH);
+            censusAnalyser1.loadCensusData(CensusAnalyser.Country.US, US_CENSUS_CSV_PATH);
             String sortedCensusData = censusAnalyser.getPopulationWiseSortedCensusData();
+            String sortedUSCensusData = censusAnalyser1.getPopulationWiseSortedCensusData();
             IndiaStateCodeCSV[] stateCodeCSV = new Gson().fromJson(sortedCensusData, IndiaStateCodeCSV[].class);
+            USCensusCSV[] USCodeCSV = new Gson().fromJson(sortedUSCensusData, USCensusCSV[].class);
             int numOfRecords = censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA, INDIA_CENSUS_CSV_FILE_PATH);
             Assert.assertEquals(29, numOfRecords);
         } catch (CensusAnalyserException e) {
@@ -116,23 +120,31 @@ public class CensusAnalyserTest {
     }
 
     @Test
-    public void givenIndianCensusData_SortedBasedOnPolpulationDensity_ShouldReturnSortedResult() throws CensusAnalyserException {
+    public void givenIndia_US_CensusData_SortedBasedOnPolpulationDensity_ShouldReturnSortedResult() throws CensusAnalyserException {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser(CensusAnalyser.Country.INDIA);
+            CensusAnalyser censusAnalyser1 = new CensusAnalyser(CensusAnalyser.Country.US);
             censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA, INDIA_CENSUS_CSV_FILE_PATH);
-            String sortedCensusData = censusAnalyser.CensusData_Sorted_BasedOnPopulationDensity();
-            IndiaCensusCSV[] Census = new Gson().fromJson(sortedCensusData, IndiaCensusCSV[].class);
+            censusAnalyser.loadCensusData(CensusAnalyser.Country.US, US_CENSUS_CSV_PATH);
+            String sortedCensusDataIndia = censusAnalyser.CensusData_Sorted_BasedOnPopulationDensity();
+            String sortedCensusDataUS = censusAnalyser1.CensusData_Sorted_BasedOnPopulationDensity();
+            IndiaCensusCSV[] Census = new Gson().fromJson(sortedCensusDataIndia, IndiaCensusCSV[].class);
+            USCensusCSV[] Census1 = new Gson().fromJson(sortedCensusDataUS, USCensusCSV[].class);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void givenIndianCensusData_AreaWiseSorted_ShouldReturnSortedResult() throws CensusAnalyserException {
+    public void givenIndia_US_CensusData_AreaWiseSorted_ShouldReturnSortedResult() throws CensusAnalyserException {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser(CensusAnalyser.Country.INDIA);
+            CensusAnalyser censusAnalyser1 = new CensusAnalyser(CensusAnalyser.Country.US);
+            censusAnalyser.loadCensusData(CensusAnalyser.Country.US, US_CENSUS_CSV_PATH);
             censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA, INDIA_CENSUS_CSV_FILE_PATH);
             String sortedCensusData = censusAnalyser.CensusData_Sorted_AreaWise();
+            String sortedUSCensusData = censusAnalyser1.CensusData_Sorted_AreaWise();
+            USCensusCSV[] Census1 = new Gson().fromJson(sortedUSCensusData, USCensusCSV[].class);
             IndiaCensusCSV[] Census = new Gson().fromJson(sortedCensusData, IndiaCensusCSV[].class);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
@@ -148,17 +160,5 @@ public class CensusAnalyserTest {
         } catch (CensusAnalyserException e) {
         }
     }
-
-    @Test
-    public void givenUSCensusData_WhenSortedPopulationWise_ShouldReturnSortedResult() throws CensusAnalyserException {
-        try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser(CensusAnalyser.Country.US);
-            censusAnalyser.loadCensusData(CensusAnalyser.Country.US, US_CENSUS_CSV_PATH);
-            String sortedCensusData = censusAnalyser.getPopulationWiseSortedCensusData();
-            USCensusCSV[] USCodeCSV = new Gson().fromJson(sortedCensusData, USCensusCSV[].class);
-            System.out.println(sortedCensusData);
-        } catch (CensusAnalyserException e) {
-            e.printStackTrace();
-        }
-    }
 }
+

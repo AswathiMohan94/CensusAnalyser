@@ -30,7 +30,7 @@ public class CensusAnalyser {
             return censusStateMap.size();
 
         }
-        catch (RuntimeException e) {
+        catch (RuntimeException  e){
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.WRONG_FILE_TYPE_OR_INVALID_FILE);
 
