@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.util.*;
 
+import static CensusAnalyserDummy.CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM;
 import static java.util.stream.Collectors.toCollection;
 
 public class CensusAnalyser {
@@ -22,14 +23,26 @@ public class CensusAnalyser {
         this.country = country;
       }
 
+
     public int loadCensusData(Country country, String... csvFilePath) throws CensusAnalyserException {
-        censusStateMap = CensusAdapterFactory.getCensusData(country, csvFilePath);
-        return censusStateMap.size();
+        try {
+            censusStateMap = CensusAdapterFactory.getCensusData(country, csvFilePath);
+            return censusStateMap.size();
+
+        }
+        catch (RuntimeException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.WRONG_FILE_TYPE_OR_INVALID_FILE);
+
+        }catch (CensusAnalyserException e) {
+            throw new CensusAnalyserException(e.getMessage(), e.type.name());
+        }
+
     }
 
     public String getStateWiseSortedCensusData() throws CensusAnalyserException {
         if (censusStateMap == null || censusStateMap.size() == 0) {
-            throw new CensusAnalyserException("No Census Data", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+            throw new CensusAnalyserException("No Census Data", CENSUS_FILE_PROBLEM);
         }
         Comparator<CensusDAO> censusComparator = Comparator.comparing(census -> census.state);
         ArrayList censusDTOS =censusStateMap.values().stream().
@@ -41,7 +54,7 @@ public class CensusAnalyser {
 
     public String SortingCodeWise() throws CensusAnalyserException {
         if (stateCodeMap == null || stateCodeMap.size() == 0)
-            throw new CensusAnalyserException("No Census Data", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+            throw new CensusAnalyserException("No Census Data", CENSUS_FILE_PROBLEM);
         Comparator<Map.Entry<String, IndiaCensusDAO>> codeComparator = Comparator.comparing(code -> code.getValue().state);
         LinkedHashMap<String, StateCodeDAO> sortedByValue = this.CodeSort(codeComparator);
         Collection<StateCodeDAO> list1 = sortedByValue.values();
@@ -51,7 +64,7 @@ public class CensusAnalyser {
 
     public String getPopulationWiseSortedCensusData() throws CensusAnalyserException {
         if (censusStateMap == null || censusStateMap.size() == 0) {
-            throw new CensusAnalyserException("No Census Data", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+            throw new CensusAnalyserException("No Census Data", CENSUS_FILE_PROBLEM);
         }
         Comparator<Map.Entry<String, IndiaCensusDAO>> censusComparator = Comparator.comparing(census -> census.getValue().population);
         LinkedHashMap<String, IndiaCensusDAO> sortedByValue = this.sortPopulation(censusComparator);
@@ -62,7 +75,7 @@ public class CensusAnalyser {
     }
     public String CensusData_Sorted_BasedOnPopulationDensity() throws CensusAnalyserException {
         if (censusStateMap == null || censusStateMap.size() == 0) {
-            throw new CensusAnalyserException("No Census Data", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+            throw new CensusAnalyserException("No Census Data", CENSUS_FILE_PROBLEM);
         }
         Comparator<Map.Entry<String, IndiaCensusDAO>> censusComparator = Comparator.comparing(census -> census.getValue().densityPerSqkm);
         LinkedHashMap<String, IndiaCensusDAO> sortedByValue = this.sortPopulationDensity(censusComparator);
@@ -73,7 +86,7 @@ public class CensusAnalyser {
     }
     public String CensusData_Sorted_AreaWise() throws CensusAnalyserException {
         if (censusStateMap == null || censusStateMap.size() == 0) {
-            throw new CensusAnalyserException("No Census Data", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+            throw new CensusAnalyserException("No Census Data", CENSUS_FILE_PROBLEM);
         }
         Comparator<Map.Entry<String, IndiaCensusDAO>> censusComparator = Comparator.comparing(census -> census.getValue().areaInSqKm);
         LinkedHashMap<String, IndiaCensusDAO> sortedByValue = this.sortArea(censusComparator);

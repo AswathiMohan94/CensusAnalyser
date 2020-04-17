@@ -28,7 +28,7 @@ public class IndiaCensusAdapter extends CensusAdapter {
         this.censusStateMap = new HashMap<>();
 
     }
-
+/*
     public Map<String, CensusDAO> loadCensusData(CensusAnalyser.Country country, String... csvFilePath) throws CensusAnalyserException {
         if (country.equals(CensusAnalyser.Country.INDIA))
             return this.loadCensusData(IndiaCensusCSV.class, csvFilePath);
@@ -36,7 +36,7 @@ public class IndiaCensusAdapter extends CensusAdapter {
             return this.loadCensusData(USCensusCSV.class, csvFilePath);
         else
             throw new CensusAnalyserException("Incorrect country", CensusAnalyserException.ExceptionType.INVALID_COUNTRY);
-    }
+    }*/
 
 
     private <E> Map<String, CensusDAO> loadCensusData(Class<E> censusCSVClass, String... csvFilePath) throws CensusAnalyserException {
