@@ -3,21 +3,23 @@ package CensusAnalyserDummy;
 import com.google.gson.Gson;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toCollection;
 
 public class CensusAnalyser {
-    public enum Country { INDIA,US,COUNTRY;}
+    public enum Country { INDIA,US;}
+    private Country country;
     Map<String, CensusDAO> censusStateMap = null;
     Map<String, IndiaCensusDAO> StateMap = null;
-
     Map<String, StateCodeDAO> stateCodeMap = null;
     Map<String, USCensusDAO> UScensusStateMap = null;
 
-    public CensusAnalyser() {
+    public CensusAnalyser(Country country) {
         this.censusStateMap = new HashMap<>();
         this.UScensusStateMap = new HashMap<String, USCensusDAO>();
         this.StateMap = new HashMap<>();
         this.stateCodeMap = new HashMap<>();
+        this.country = country;
       }
 
     public int loadCensusData(Country country, String... csvFilePath) throws CensusAnalyserException {
@@ -30,10 +32,11 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("No Census Data", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }
         Comparator<CensusDAO> censusComparator = Comparator.comparing(census -> census.state);
-        List<CensusDAO> censusDAOS = censusStateMap.values().stream().
-                    collect(Collectors.toList());
-        this.sort(censusDAOS, censusComparator);
-        String sortedStateCensusJson = new Gson().toJson(censusDAOS);
+        ArrayList censusDTOS =censusStateMap.values().stream().
+                sorted(censusComparator).
+                map(censusDAO -> censusDAO.getCensusDTO(country)).
+                collect(toCollection(ArrayList::new));
+        String sortedStateCensusJson = new Gson().toJson(censusDTOS);
         return sortedStateCensusJson; }
 
     public String SortingCodeWise() throws CensusAnalyserException {

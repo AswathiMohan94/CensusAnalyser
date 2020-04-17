@@ -21,4 +21,7 @@ public class USCensusCSV {
     public double populationDensity;
 
 
+    public USCensusCSV(String state, String stateCode, int population, double populationDensity, double totalArea) {
+    }
 }
+
