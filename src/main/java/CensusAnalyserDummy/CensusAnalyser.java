@@ -3,9 +3,10 @@ package CensusAnalyserDummy;
 import com.google.gson.Gson;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CensusAnalyser {
-    public enum Country { INDIA,US;}
+    public enum Country { INDIA,US,COUNTRY;}
     Map<String, CensusDAO> censusStateMap = null;
     Map<String, IndiaCensusDAO> StateMap = null;
 
@@ -20,17 +21,19 @@ public class CensusAnalyser {
       }
 
     public int loadCensusData(Country country, String... csvFilePath) throws CensusAnalyserException {
-        censusStateMap = new CensusLoader().loadCensusData(country, csvFilePath);
+        censusStateMap = CensusAdapterFactory.getCensusData(country, csvFilePath);
         return censusStateMap.size();
     }
 
     public String getStateWiseSortedCensusData() throws CensusAnalyserException {
-        if (censusStateMap == null || censusStateMap.size() == 0)
+        if (censusStateMap == null || censusStateMap.size() == 0) {
             throw new CensusAnalyserException("No Census Data", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
-        Comparator<Map.Entry<String, IndiaCensusDAO>> censusComparator = Comparator.comparing(census -> census.getValue().state);
-        LinkedHashMap<String, IndiaCensusDAO> sortedByValue = this.sort(censusComparator);
-        Collection<IndiaCensusDAO> list1 = sortedByValue.values();
-        String sortedStateCensusJson = new Gson().toJson(list1);
+        }
+        Comparator<CensusDAO> censusComparator = Comparator.comparing(census -> census.state);
+        List<CensusDAO> censusDAOS = censusStateMap.values().stream().
+                    collect(Collectors.toList());
+        this.sort(censusDAOS, censusComparator);
+        String sortedStateCensusJson = new Gson().toJson(censusDAOS);
         return sortedStateCensusJson; }
 
     public String SortingCodeWise() throws CensusAnalyserException {
@@ -76,7 +79,7 @@ public class CensusAnalyser {
         String sortedStateCensusJson = new Gson().toJson(list);
         return sortedStateCensusJson;
     }
-    private <E extends IndiaCensusDAO> LinkedHashMap<String, IndiaCensusDAO> sort(Comparator censusComparator) {
+    private <E extends IndiaCensusDAO> LinkedHashMap<String, IndiaCensusDAO> sort(List<CensusDAO> censusDAOS, Comparator censusComparator) {
         Set<Map.Entry<String, IndiaCensusDAO>> entries = StateMap.entrySet();
         List<Map.Entry<String, IndiaCensusDAO>> listOfEntries = new ArrayList<>(entries);
         Collections.sort(listOfEntries, censusComparator);
