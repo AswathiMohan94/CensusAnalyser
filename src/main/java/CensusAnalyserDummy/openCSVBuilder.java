@@ -31,4 +31,5 @@ public class openCSVBuilder<E> implements ICSVBuilder {
                     CSVBuilderException.ExceptionType.UNABLE_TO_PARSE);
         }
     }
+
 }

@@ -2,8 +2,9 @@ package CensusAnalyserDummy;
 
 import java.util.Map;
 
-public class USCensusAdapter {
-    public Map<String, CensusDAO> loadCensusData(String[] csvFilePath) {
-        return null;
+public class USCensusAdapter extends CensusAdapter{
+
+    public Map<String, CensusDAO> loadCensusData(String... csvFilePath) throws CensusAnalyserException {
+        return super.loadCensusData(USCensusCSV.class,csvFilePath[0]);
     }
 }
